@@ -1,28 +1,40 @@
 {% load static %}
 
 <html>
-	<head>
-		<title>Detail Page</title>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-		<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
-		<link rel="stylesheet" href="{% static 'css/recommendation.css' %}">
-	</head>
+<head>
+	<title>Detail Page</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+	<link rel="stylesheet" href="{% static 'css/recommendation.css' %}">
+</head>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function() {
 		$('#details').DataTable();
 	} );
-	</script>
+	$(document).ready(function() {
+		$('#similar_items').DataTable();
+	} );
+	$(document).ready(function() {
+		$('#packages_in_same_repo').DataTable();
+	} );
+</script>
 
-	<body>
-		<div>
-			<h1><a href="/recommendation">Robotics Lib Search Engine</a></h1>
-		</div>
+<body>
+	<div class="page-header">
+		<h1><a href="/recommendation">Robotics Lib Search Engine</a></h1>
+	</div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page">{{ entity_id }}</li>
+		</ol>
+	</nav>
 
+	<div class="content">
 		{% if detailinfo %}
 		<table id="details" class="able table-striped table-bordered " width="100%">
 			<thead>
@@ -34,16 +46,61 @@
 			</thead>
 			<tbody>
 				{% for entity in detailinfo %}
-					<tr>
-						<td>{{entity.dist.value}}</td>
-						<td>{{entity.p.value}}</td>
-						<td>{{entity.o.value}}</td>
-					</tr>
+				<tr>
+					<td>{{entity.dist.value}}</td>
+					<td>{{entity.p.value}}</td>
+					<td>{{entity.o.value}}</td>
+				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 		{% else %}
-			<p>No details are available.</p>
+		<p>No detail information are available.</p>
 		{% endif %}
-	</body>
+
+		{% if packages %}
+		<table id="packages" class="able table-striped table-bordered " width="100%">
+			<thead>
+				<tr>
+					<th>Repository Name</th>
+					<th>Package Name</th>
+					<th>Distribution Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for entry in packages %}
+				<tr>
+					<td>{{entry.reposname.value}}</td>
+					<td>{{entry.pname.value}}</td>
+					<td>{{entry.g.value}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p>No other packages in the same repository.</p>
+		{% endif %}
+
+		{% if similar_items %}
+		<table id="similar_items" class="able table-striped table-bordered " width="100%">
+			<thead>
+				<tr>
+					<th>Object</th>
+					<th>Ranking Score</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in similar_items %}
+				<tr>
+					<td><a href="/recommendation/ros-model/Package/{{ item.name }}/">{{ item.name }}</a></td>
+					<td>{{item.score}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p>No similar items are found!</p>
+		{% endif %}
+	</div>
+</body>
 </html>

@@ -12,57 +12,35 @@
 		<link rel="stylesheet" href="{% static 'css/recommendation.css' %}">
 	</head>
 	<body>
-		<div>
+		<div class="page-header">
 			<h1><a href="/recommendation">Robotics Lib Search Engine</a></h1>
 		</div>
 
-		<div class="main">
+		<div class="main content">
 			<div class="modal-body row">
-				<div class="col-lg-2">
-					<div class="btn-group dropright">
-						<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="category1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Category One
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#">SubCategory One</a>
-							<a class="dropdown-item" href="#">SubCategory Two</a>
-							<a class="dropdown-item" href="#">SubCategory Three</a>
+				<div class="col-lg-3">
+					{% if tags %}
+					<form action="" method="POST">
+						{% csrf_token %}
+						<div class="bd-example">
+							{% for tag in tags %}
+								<button type="submit" name='tag' value='{{ tag.t.value }}' class="btn btn-outline-secondary btn-sm">{{ tag.t.value }}</button>
+							{% endfor %}
 						</div>
-					</div>
-					<div><p/></div>
-					<div class="btn-group dropright">
-						<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="category2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Category Two
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#">SubCategory One</a>
-							<a class="dropdown-item" href="#">SubCategory Two</a>
-							<a class="dropdown-item" href="#">SubCategory Three</a>
-						</div>
-					</div>
-					<div><p/></div>
-					<div class="btn-group dropright">
-						<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="category3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Category Three
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#">SubCategory One</a>
-							<a class="dropdown-item" href="#">SubCategory Two</a>
-							<a class="dropdown-item" href="#">SubCategory Three</a>
-						</div>
-					</div>
+					</form>
+					{% endif %}
 				</div>
-				<div class="col-lg-10">
+				<div class="col-lg-9">
 					<form action="" method="POST">
 						{% csrf_token %}
 						{{ form }}
-						<input type="submit" value="Search" class="btn btn-primary" />
+						<input type="submit" name='search' value="Search" class="btn btn-warning" />
 					</form>
 
 					{% if entities %}
 					<div class="list-group">
 						{% for entity in entities %}
-							<a href="/recommendation/{{ entity.pkg.value|genId }}/" class="list-group-item list-group-item-action">{{ entity.pkg.value }}</a>
+							<a href="/recommendation/{{ entity.enti.value|genId }}/" class="list-group-item list-group-item-action">{{ entity.enti.value }}</a>
 						{% endfor %}
 					</div>
 					{% else %}
