@@ -56,9 +56,9 @@ def getOtherPackages(entity_id):
 	query = """
 	PREFIX ros-model: <http://ros-model/>
 	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-	select ?reposname ?pname ?g
+	select ?reposname ?pname #?g
 	where{
-	graph ?g{
+	#graph ?g{
 	<"""+entity_id+"""> a ros-model:Package.
 	?repos a ros-model:Repository;
 		ros-model:hasRelease ?rl;
@@ -67,7 +67,8 @@ def getOtherPackages(entity_id):
 		ros-model:hasPackage ?p.
 		?p ros-model:Name ?pname.
 	filter(?p != <"""+entity_id+""">).
-	}}"""
+	#}
+	}"""
 	#print(query)
 	sparql.setQuery(query)
 	sparql.setReturnFormat(JSON)
@@ -79,15 +80,15 @@ def getAllPackagesInRepo(entity_id):
 	query = """
 	PREFIX ros-model: <http://ros-model/>
 	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-	select ?reposname ?pname ?g
+	select ?reposname ?pname #?g
 	where {
-		graph ?g{
+		#graph ?g{
 			<"""+entity_id+"""> a ros-model:Repository;
 			rdfs:label ?reposname;
 			ros-model:hasRelease ?rl.
 			?rl ros-model:hasPackage ?pkg.
 			?pkg ros-model:Name ?pname.
-		}
+		#}
 	}
 	"""
 	sparql.setQuery(query)
