@@ -4,7 +4,7 @@ def getSimilarItems(name):
 	default_similar_item_threshold = 47
 	core_package_list = ['catkin','ros_core','ros_base','robot','desktop','desktop_full']
 	result = []
-	with open(os.path.dirname(os.path.abspath(__file__))+'/similarItems.csv','r') as csvfile:
+	with open(os.path.dirname(os.path.abspath(__file__))+'/lda_75_cosine_top50.csv','r') as csvfile:
 		readCSV = csv.reader(csvfile, delimiter=',')
 		for row in readCSV:
 			if row[0] == name:
